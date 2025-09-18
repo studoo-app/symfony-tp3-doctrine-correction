@@ -43,6 +43,13 @@ class Formation
     #[ORM\Column(nullable: true)]
     private ?int $capaciteMax = null;
 
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+        $this->estPubliee = false;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
