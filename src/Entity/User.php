@@ -45,6 +45,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $estActif = null;
 
+    public function __construct()
+    {
+        $this->dateInscription = new \DateTime();
+        $this->estActif = true;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
