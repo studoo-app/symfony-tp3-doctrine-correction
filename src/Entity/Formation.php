@@ -51,11 +51,18 @@ class Formation
     #[ORM\OneToMany(targetEntity: Module::class, mappedBy: 'formation', orphanRemoval: true)]
     private Collection $modules;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'formationsEnseignees')]
+    private Collection $instructeurs;
+
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
         $this->estPubliee = false;
         $this->modules = new ArrayCollection();
+        $this->instructeurs = new ArrayCollection();
     }
 
 
@@ -186,6 +193,30 @@ class Formation
                 $module->setFormation(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getInstructeurs(): Collection
+    {
+        return $this->instructeurs;
+    }
+
+    public function addInstructeur(User $instructeur): static
+    {
+        if (!$this->instructeurs->contains($instructeur)) {
+            $this->instructeurs->add($instructeur);
+        }
+
+        return $this;
+    }
+
+    public function removeInstructeur(User $instructeur): static
+    {
+        $this->instructeurs->removeElement($instructeur);
 
         return $this;
     }

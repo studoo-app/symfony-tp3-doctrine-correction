@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -45,10 +47,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $estActif = null;
 
+    /**
+     * @var Collection<int, Formation>
+     */
+    #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'instructeurs')]
+    private Collection $formationsEnseignees;
+
     public function __construct()
     {
         $this->dateInscription = new \DateTime();
         $this->estActif = true;
+        $this->formationsEnseignees = new ArrayCollection();
     }
 
 
@@ -165,6 +174,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEstActif(bool $estActif): static
     {
         $this->estActif = $estActif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formation>
+     */
+    public function getFormationsEnseignees(): Collection
+    {
+        return $this->formationsEnseignees;
+    }
+
+    public function addFormationsEnseignee(Formation $formationsEnseignee): static
+    {
+        if (!$this->formationsEnseignees->contains($formationsEnseignee)) {
+            $this->formationsEnseignees->add($formationsEnseignee);
+            $formationsEnseignee->addInstructeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationsEnseignee(Formation $formationsEnseignee): static
+    {
+        if ($this->formationsEnseignees->removeElement($formationsEnseignee)) {
+            $formationsEnseignee->removeInstructeur($this);
+        }
 
         return $this;
     }
