@@ -53,11 +53,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'instructeurs')]
     private Collection $formationsEnseignees;
 
+    /**
+     * @var Collection<int, Inscription>
+     */
+    #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'apprenant', orphanRemoval: true)]
+    private Collection $inscriptions;
+
     public function __construct()
     {
         $this->dateInscription = new \DateTime();
         $this->estActif = true;
         $this->formationsEnseignees = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
 
@@ -200,6 +207,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->formationsEnseignees->removeElement($formationsEnseignee)) {
             $formationsEnseignee->removeInstructeur($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Inscription>
+     */
+    public function getInscriptions(): Collection
+    {
+        return $this->inscriptions;
+    }
+
+    public function addInscription(Inscription $inscription): static
+    {
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions->add($inscription);
+            $inscription->setApprenant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(Inscription $inscription): static
+    {
+        if ($this->inscriptions->removeElement($inscription)) {
+            // set the owning side to null (unless already changed)
+            if ($inscription->getApprenant() === $this) {
+                $inscription->setApprenant(null);
+            }
         }
 
         return $this;
