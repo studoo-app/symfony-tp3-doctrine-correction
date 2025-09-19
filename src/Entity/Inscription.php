@@ -37,6 +37,14 @@ class Inscription
     #[ORM\JoinColumn(nullable: false)]
     private ?Formation $formation = null;
 
+    public function __construct()
+    {
+        $this->dateInscription = new \DateTimeImmutable();
+        $this->statut = 'en cours';
+        $this->progressionPourcentage = 0;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
