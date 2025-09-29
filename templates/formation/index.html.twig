@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des formations{% endblock %}
+
+{% block body %}
+<div class="row mb-3">
+    <div class="col">
+        <h1>Liste des formations</h1>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for f in formations %}
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ f.titre }}</h5>
+                        <p class="card-text">{{ f.description }}</p>
+                        <p class="card-text">{{ f.inscriptions | length }} inscrits</p>
+                        <dl>
+                            <dt>Instructeurs:</dt>
+                            <dd>
+                                <ul>
+                                    {%  for i in f.instructeurs %}
+                                        <li>{{ i.nomAffichage }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </dd>
+                        </dl>
+
+
+                        <a href="{{ path('app_formation_show',{id: f.id}) }}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            <p>Aucune formation trouvé</p>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}

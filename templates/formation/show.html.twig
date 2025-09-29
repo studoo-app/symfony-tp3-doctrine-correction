@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ formation.titre }}{% endblock %}
+
+{% block body %}
+    <div class="row mb-3">
+        <div class="col">
+            <h1>{{ formation.titre }}</h1>
+        </div>
+        <div class="col text-end">
+            <a href="{{ path('app_formation') }}" class="btn btn-danger">Retour à la liste</a>
+            <a href="#" class="btn btn-primary">Inscription</a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Description</h5>
+            <p class="card-text">{{ formation.description }}</p>
+            <dl>
+                <dt>Niveau:</dt>
+                <dd>{{ formation.niveauDifficulte }} </dd>
+                <dt>Prix:</dt>
+                <dd>{{ formation.prix }} €</dd>
+                <dt>Durée:</dt>
+                <dd>{{ formation.dureeHeures }} heures</dd>
+                <dt>Modules</dt>
+                <dd><ul>
+                        {%  for m in formation.modules %}
+                            <li>{{ m.titre }}</li>
+                        {% endfor %}
+                    </ul></dd>
+                <dt>Instructeurs:</dt>
+                <dd>
+                    <ul>
+                        {%  for i in formation.instructeurs %}
+                            <li>{{ i.nomAffichage }}</li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+                <dt>Inscriptions:</dt>
+                <dd>{{ formation.inscriptions | length }} inscrits</dd>
+            </dl>
+        </div>
+    </div>
+
+{% endblock %}
