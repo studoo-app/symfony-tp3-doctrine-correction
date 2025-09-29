@@ -22,7 +22,6 @@ final class TestController extends AbstractController
         $formations = $em->getRepository(Formation::class)->findAll();
         $inscriptions = $em->getRepository(Inscription::class)->findAll();
 
-
         return $this->render('test/index.html.twig', [
             'controller_name' => 'TestController',
             'formations' => $formations,
