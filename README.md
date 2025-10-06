@@ -257,3 +257,5 @@ Créez un contrôleur `FormationController` avec :
 - [Doctrine dans Symfony](https://symfony.com/doc/current/doctrine.html)
 - [Migrations Doctrine](https://symfony.com/doc/current/doctrine/migrations.html)
 - [Validation Symfony](https://symfony.com/doc/current/validation.html)
+
+Bonojour
